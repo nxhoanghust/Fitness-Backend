@@ -4,6 +4,8 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const cors = require("cors");
 const usersRouter = require("./users/users.router");
+const postsRouter = require("./posts/posts.router");
+const uploadRouter = require("./upload/upload.router");
 
 mongoose.connect("mongodb://localhost:27017/fitness", error => {
   if (error) {
@@ -13,6 +15,14 @@ mongoose.connect("mongodb://localhost:27017/fitness", error => {
     const app = express();
 
     //cors
+    app.use(
+      cors({
+        origin: "http://localhost:3000",
+        credentials: true
+      })
+    );
+    app.use(express.static("public"));
+    app.options("*", cors());
     app.use(bodyParser.json());
     app.use(
       session({
@@ -21,6 +31,8 @@ mongoose.connect("mongodb://localhost:27017/fitness", error => {
     );
     //router
     app.use("/users", usersRouter);
+    app.use("/posts", postsRouter);
+    app.use("/upload", uploadRouter);
     //listen
     app.listen(3001, error => {
       if (error) {

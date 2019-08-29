@@ -40,10 +40,11 @@ usersRouter.post("/login", (req, res) => {
           email: data.email,
           fullName: data.fullName
         };
-        //console.log(req.session.currentUser);
+        console.log(req.session.currentUser);
         res.status(200).json({
           success: true,
-          message: "Login successful!!"
+          message: "Login successful!!",
+          data: req.session.currentUser
         });
       } else {
         res.status(400).json({
@@ -56,7 +57,8 @@ usersRouter.post("/login", (req, res) => {
 });
 
 usersRouter.post("/register", (req, res) => {
-  const { email, password, fullName, address } = req.body;
+  const { email, password, fullName, address, phoneNumber } = req.body;
+  console.log(req.body);
   if (!email || !emailRegex.test(email)) {
     res.status(400).json({
       success: false,
@@ -76,6 +78,11 @@ usersRouter.post("/register", (req, res) => {
     res.status(400).json({
       success: false,
       message: "Please input your Adress"
+    });
+  } else if (!phoneNumber) {
+    res.status(400).json({
+      success: false,
+      message: "Please input your phone Number"
     });
   } else {
     usersModel.findOne({ email: email }, (error, data) => {
