@@ -1,17 +1,27 @@
 const express = require("express");
 const bcryptjs = require("bcryptjs");
 const usersModel = require("./users.model");
-
+const mongoose = require("mongoose");
 const usersRouter = express.Router();
 const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
-usersRouter.get("/test", (req, res) => {
+usersRouter.post("/test", (req, res) => {
   console.log(req.session.currentUser);
-  if (req.session.currentUser) {
+  if (req.session.currentUser !== undefined) {
     res.json({
       success: true,
       data: req.session.currentUser
     });
+    /*} else if (req.body.email) {
+    req.session.currentUser = {
+      _id: req.body._id,
+      email: req.body.email,
+      fullName: req.body.fullName
+    };
+    res.json({
+      success: true,
+      data: req.session.currentUser
+    });*/
   } else {
     res.json({
       success: false,
@@ -128,6 +138,7 @@ usersRouter.post("/register", (req, res) => {
 });
 usersRouter.get("/logout", (req, res) => {
   req.session.destroy(error => {
+    //console.log(req.session.currentUser);
     if (error) {
       res.status(500).json({
         success: false,
@@ -141,4 +152,21 @@ usersRouter.get("/logout", (req, res) => {
     }
   });
 });
+usersRouter.get("/:usersId", (req, res) => {
+  console.log(req.params.usersId);
+  usersModel.findById(req.params.usersId, (error, data) => {
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        data: { ...data._doc, password: "" }
+      });
+    }
+  });
+});
+
 module.exports = usersRouter;

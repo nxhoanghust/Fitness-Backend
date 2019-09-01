@@ -25,6 +25,10 @@ const UsersSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
     required: true
+  },
+  avatar: {
+    type: String,
+    default: ""
   }
 });
 

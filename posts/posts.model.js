@@ -17,7 +17,15 @@ const postsSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  vote: {
+  voteAvg: {
+    type: Number,
+    default: 0
+  },
+  voteNumber: {
+    type: Number,
+    default: 0
+  },
+  commentNumber: {
     type: Number,
     default: 0
   },
