@@ -4,15 +4,17 @@ const usersModel = require("./users.model");
 const mongoose = require("mongoose");
 const usersRouter = express.Router();
 const emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+const phoneRegex = /^0(1\d{9}|9\d{8})$/;
 
 usersRouter.post("/test", (req, res) => {
-  console.log(req.session.currentUser);
+  //console.log(req.session.currentUser);
+  //console.log(req.body);
   if (req.session.currentUser !== undefined) {
     res.json({
       success: true,
       data: req.session.currentUser
     });
-    /*} else if (req.body.email) {
+  } else if (req.body._id) {
     req.session.currentUser = {
       _id: req.body._id,
       email: req.body.email,
@@ -21,7 +23,7 @@ usersRouter.post("/test", (req, res) => {
     res.json({
       success: true,
       data: req.session.currentUser
-    });*/
+    });
   } else {
     res.json({
       success: false,
@@ -54,7 +56,7 @@ usersRouter.post("/login", (req, res) => {
         res.status(200).json({
           success: true,
           message: "Login successful!!",
-          data: req.session.currentUser
+          data: { ...data._doc, password: "" }
         });
       } else {
         res.status(400).json({
@@ -89,10 +91,10 @@ usersRouter.post("/register", (req, res) => {
       success: false,
       message: "Please input your Adress"
     });
-  } else if (!phoneNumber) {
+  } else if (!phoneNumber || !phoneRegex.test(phoneNumber)) {
     res.status(400).json({
       success: false,
-      message: "Please input your phone Number"
+      message: "Invalid phone number"
     });
   } else {
     usersModel.findOne({ email: email }, (error, data) => {
@@ -136,6 +138,38 @@ usersRouter.post("/register", (req, res) => {
     });
   }
 });
+
+usersRouter.post("/update-profile", (req, res) => {
+  //console.log(req.session.currentUser);
+  if (!req.session.currentUser) {
+    res.status(500).json({
+      success: false,
+      message: "No Current User"
+    });
+  } else {
+    //console.log(req.body);
+    usersModel.findOneAndUpdate(
+      { _id: req.session.currentUser._id },
+      {
+        fullName: req.body.fullName,
+        phoneNumber: req.body.phoneNumber,
+        avatar: req.body.avatar
+      },
+      err => {
+        if (err) {
+          res.status(500).json({
+            success: false,
+            message: err.message
+          });
+        } else {
+          res.status(200).json({
+            success: true
+          });
+        }
+      }
+    );
+  }
+});
 usersRouter.get("/logout", (req, res) => {
   req.session.destroy(error => {
     //console.log(req.session.currentUser);
@@ -152,7 +186,7 @@ usersRouter.get("/logout", (req, res) => {
     }
   });
 });
-usersRouter.get("/:usersId", (req, res) => {
+usersRouter.get("/profile/:usersId", (req, res) => {
   console.log(req.params.usersId);
   usersModel.findById(req.params.usersId, (error, data) => {
     if (error) {

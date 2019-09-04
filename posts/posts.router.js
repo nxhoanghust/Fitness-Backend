@@ -30,7 +30,7 @@ postsRouter.get("/get", (req, res) => {
       .sort({ createAt: -1 })
       .skip((pageNumber - 1) * pageSize)
       .limit(pageSize)
-      .populate("author", "fullName")
+      .populate("author", "fullName avatar")
       .exec((error, data) => {
         if (error) {
           res.status(500).json({
@@ -64,7 +64,7 @@ postsRouter.get("/:postId", (req, res) => {
   //console.log(req.session.currentUser);
   postsModel
     .findById(req.params.postId)
-    .populate("author", "fullName")
+    .populate("author", "fullName avatar")
     .exec((error, data) => {
       if (error) {
         res.status(500).json({
@@ -74,7 +74,7 @@ postsRouter.get("/:postId", (req, res) => {
       } else {
         commentModel
           .find({ post: req.params.postId })
-          .populate("author", "fullName")
+          .populate("author", "fullName avatar")
           .exec((err, dataComment) => {
             if (err) {
               res.status(500).json({
@@ -95,6 +95,44 @@ postsRouter.get("/:postId", (req, res) => {
       }
     });
 });
+
+postsRouter.get("/search/:searchKey", (req, res) => {
+  postsModel
+    .find({ title: { $regex: req.params.searchKey, $options: "i" } })
+    .sort({ voteAvg: -1 })
+    .limit(5)
+    .populate("author", "fullName avatar")
+    .exec((err, data) => {
+      if (err) {
+        res.status(500).json({
+          success: false,
+          message: err.message
+        });
+      }
+      postsModel
+        .find({
+          tag: { $regex: req.params.searchKey, $options: "i" }
+        })
+        .sort({ voteAvg: -1 })
+        .limit(5)
+        .populate("author", "fullName avatar")
+        .exec((error, data1) => {
+          if (error) {
+            res.status(500).json({
+              success: false,
+              message: error.message
+            });
+          } else {
+            res.status(200).json({
+              success: true,
+              data: data,
+              dataTag: data1
+            });
+          }
+        });
+    });
+});
+
 postsRouter.post("/create", (req, res) => {
   //console.log(req.session.currentUser);
   //console.log(req.body);
