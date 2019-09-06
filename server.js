@@ -6,9 +6,7 @@ const cors = require("cors");
 const usersRouter = require("./users/users.router");
 const postsRouter = require("./posts/posts.router");
 const uploadRouter = require("./upload/upload.router");
-const cheerio = require("cheerio");
-const request = require("request");
-
+const crawlRouter = require("./crawl/crawl.router");
 mongoose.connect("mongodb://localhost:27017/fitness", error => {
   if (error) {
     console.log(error);
@@ -35,8 +33,7 @@ mongoose.connect("mongodb://localhost:27017/fitness", error => {
     app.use("/users", usersRouter);
     app.use("/posts", postsRouter);
     app.use("/upload", uploadRouter);
-    //crawler
-
+    app.use("/find", crawlRouter);
     //listen
     app.listen(3001, error => {
       if (error) {
