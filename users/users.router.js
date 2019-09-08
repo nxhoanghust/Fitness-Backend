@@ -69,8 +69,8 @@ usersRouter.post("/login", (req, res) => {
 });
 
 usersRouter.post("/register", (req, res) => {
-  const { email, password, fullName, address, phoneNumber } = req.body;
-  console.log(req.body);
+  const { email, password, fullName, address, phoneNumber, gender } = req.body;
+  //console.log(req.body);
   if (!email || !emailRegex.test(email)) {
     res.status(400).json({
       success: false,
@@ -95,6 +95,11 @@ usersRouter.post("/register", (req, res) => {
     res.status(400).json({
       success: false,
       message: "Invalid phone number"
+    });
+  } else if (!gender) {
+    res.status(400).json({
+      success: false,
+      message: "Invalid gender"
     });
   } else {
     usersModel.findOne({ email: email }, (error, data) => {

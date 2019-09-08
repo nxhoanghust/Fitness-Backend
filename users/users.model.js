@@ -19,7 +19,7 @@ const UsersSchema = new mongoose.Schema({
     default: new Date()
   },
   address: {
-    type: String, 
+    type: String,
     required: true
   },
   phoneNumber: {
@@ -29,6 +29,22 @@ const UsersSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default: ""
+  },
+  gender: {
+    type: String,
+    required: true
+  },
+  weight: {
+    type: Number
+  },
+  height: {
+    type: Number
+  },
+  waist: {
+    type: Number
+  },
+  hips: {
+    type: Number  
   }
 });
 
