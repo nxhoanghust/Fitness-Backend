@@ -44,7 +44,10 @@ const UsersSchema = new mongoose.Schema({
     type: Number
   },
   hips: {
-    type: Number  
+    type: Number
+  },
+  BMI: {
+    type: Number
   }
 });
 

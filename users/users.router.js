@@ -191,6 +191,41 @@ usersRouter.get("/logout", (req, res) => {
     }
   });
 });
+usersRouter.post("/statistic", (req, res) => {
+  if (!req.session.currentUser._id) {
+    res.status(500).json({
+      success: false,
+      message: "No current User!"
+    });
+  } else {
+    usersModel.findByIdAndUpdate(
+      req.session.currentUser._id,
+      {
+        weight: req.body.weight,
+        height: req.body.height,
+        waist: req.body.waist,
+        hips: req.body.hips,
+        BMI:  req.body.BMI
+      },
+      (error, data) => {
+        if (error) {
+          res.status(500).json({
+            success: false,
+            message: error.message
+          });
+        } else {
+          res.status(200).json({
+            success: true,
+            data: {
+              ...data._doc,
+              password: ""
+            }
+          });
+        }
+      }
+    );
+  }
+});
 usersRouter.get("/profile/:usersId", (req, res) => {
   console.log(req.params.usersId);
   usersModel.findById(req.params.usersId, (error, data) => {
