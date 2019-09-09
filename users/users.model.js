@@ -48,6 +48,9 @@ const UsersSchema = new mongoose.Schema({
   },
   BMI: {
     type: Number
+  },
+  WHR: {
+    type: Number
   }
 });
 
