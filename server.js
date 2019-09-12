@@ -7,7 +7,7 @@ const usersRouter = require("./users/users.router");
 const postsRouter = require("./posts/posts.router");
 const uploadRouter = require("./upload/upload.router");
 const crawlRouter = require("./crawl/crawl.router");
-mongoose.connect("mongodb+srv://mindx-fitness-tvkpd.mongodb.net/test", error => {
+mongoose.connect("mongodb+srv://kutj_vip99:hoang123@mindx-fitness-tvkpd.mongodb.net/test?retryWrites=true&w=majority", error => {
   if (error) {
     console.log(error);
   } else {
