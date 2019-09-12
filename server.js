@@ -7,7 +7,7 @@ const usersRouter = require("./users/users.router");
 const postsRouter = require("./posts/posts.router");
 const uploadRouter = require("./upload/upload.router");
 const crawlRouter = require("./crawl/crawl.router");
-mongoose.connect("mongodb://localhost:27017/fitness", error => {
+mongoose.connect("mongodb+srv://mindx-fitness-tvkpd.mongodb.net/test", error => {
   if (error) {
     console.log(error);
   } else {
@@ -17,7 +17,7 @@ mongoose.connect("mongodb://localhost:27017/fitness", error => {
     //cors
     app.use(
       cors({
-        origin: "http://localhost:3000",
+        origin: "https://mindx-fitness.herokuapp.com/",
         credentials: true
       })
     );
