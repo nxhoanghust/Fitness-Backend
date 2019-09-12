@@ -67,9 +67,25 @@ usersRouter.post("/login", (req, res) => {
     }
   });
 });
+usersRouter.get("/logout", (req, res) => {
+  req.session.destroy(error => {
+    //console.log(req.session.currentUser);
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message
+      });
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Logout success"
+      });
+    }
+  });
+});
 
 usersRouter.get("/statistic/get", (req, res) => {
-  console.log(req.session.currentUser);
+    console.log(req.session.currentUser);
   if (!req.session.currentUser._id) {
     res.status(500).json({
       success: false,
@@ -237,22 +253,6 @@ usersRouter.post("/update-profile", (req, res) => {
       }
     );
   }
-});
-usersRouter.get("/logout", (req, res) => {
-  req.session.destroy(error => {
-    //console.log(req.session.currentUser);
-    if (error) {
-      res.status(500).json({
-        success: false,
-        message: error.message
-      });
-    } else {
-      res.status(200).json({
-        success: true,
-        message: "Logout success"
-      });
-    }
-  });
 });
 
 usersRouter.get("/profile/:usersId", (req, res) => {
