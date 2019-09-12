@@ -19,7 +19,7 @@ mongoose.connect(
       //cors
       app.use(
         cors({
-          origin: "https://mindx-fitness.herokuapp.com/",
+          origin: "https://mindx-fitness.herokuapp.com",
           credentials: true
         })
       );

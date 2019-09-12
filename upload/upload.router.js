@@ -30,7 +30,7 @@ uploadRouter.post("/image", upload.array("images", 8), (req, res, next) => {
           }
         }
       );
-      arr.push(`http://localhost:3001/${newNameFile}`);
+      arr.push(`https://mindx-fitness.herokuapp.com/${newNameFile}`);
       //console.log(arr);
       if (arr.length === req.files.length) {
         res.status(200).json({
@@ -56,7 +56,7 @@ uploadRouter.post("/avatar", upload.single("avatar"), (req, res) => {
       res.status(200).json({
         success: true,
         data: {
-          imageUrl: `http://localhost:3001/${newNameFile}`
+          imageUrl: `https://mindx-fitness.herokuapp.com/${newNameFile}`
         }
       });
     }
